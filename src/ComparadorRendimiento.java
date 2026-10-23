@@ -33,6 +33,36 @@ public class ComparadorRendimiento {
                 tipoArreglo, tiempoMs, comparaciones, intercambios);
     }
 
+    public static void insertionSort(int[] arr, String tipoArreglo) {
+        long inicio = System.nanoTime();
+        long comparaciones = 0;
+        long intercambios = 0; // En Insertion Sort medimos los desplazamientos
+        int n = arr.length;
+
+        for (int i = 1; i < n; i++) {
+            int key = arr[i];
+            int j = i - 1;
+
+            while (j >= 0) {
+                comparaciones++;
+                if (arr[j] > key) {
+                    arr[j + 1] = arr[j];
+                    intercambios++;
+                    j--;
+                } else {
+                    break;
+                }
+            }
+            arr[j + 1] = key; // Colocamos la llave en su posición final
+        }
+
+        long fin = System.nanoTime();
+        double tiempoMs = (fin - inicio) / 1_000_000.0;
+
+        System.out.printf("Insertion Sort (%s): %.3f ms | Comparaciones: %d | Intercambios: %d%n",
+                tipoArreglo, tiempoMs, comparaciones, intercambios);
+    }
+
     public static int[] generarAleatorio(int size) {
         Random rand = new Random();
         int[] arr = new int[size];
@@ -77,9 +107,15 @@ public class ComparadorRendimiento {
         int[] inverso = generarInverso(base);
 
         System.out.println("Arreglos de " + tamano + " elementos generados con éxito.");
+
         System.out.println("\n--- RESULTADOS BUBBLE SORT ---");
         bubbleSortOptimizado(aleatorio.clone(), "Aleatorio");
         bubbleSortOptimizado(casiOrdenado.clone(), "Casi Ordenado");
         bubbleSortOptimizado(inverso.clone(), "Inverso");
+
+        System.out.println("\n--- RESULTADOS INSERTION SORT ---");
+        insertionSort(aleatorio.clone(), "Aleatorio");
+        insertionSort(casiOrdenado.clone(), "Casi Ordenado");
+        insertionSort(inverso.clone(), "Inverso");
     }
 }
